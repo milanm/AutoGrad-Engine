@@ -26,7 +26,7 @@ public class Value
     // The actual number (e.g. 0.37, -1.2, etc.)
     public double Data;
 
-    // The gradient: "how much does the final error change if I nudge this number?"
+    // The gradient: `∂finalLoss/∂this` or "how much does the final error change if I nudge this number?"
     // Starts at 0, gets filled in during Backward().
     public double Grad;
 
@@ -70,7 +70,7 @@ public class Value
     public static Value operator +(Value a, double b) => a + new Value(b);
     public static Value operator +(double a, Value b) => new Value(a) + b;
 
-    // Multiplication: d(a*b)/da = b, d(a*b)/db = a
+    // Multiplication: `d(finalLoss)/d(a) = d(finalLoss)/d(a*b) * d(a*b)/da` and `d(a*b)/da = b`. So `a.Grad = outVal.Grad * b`
     // Each input's gradient is scaled by the OTHER input's value.
     // Intuition: if b is large, a small change in a has a big effect on the product.
     public static Value operator *(Value a, Value b)
